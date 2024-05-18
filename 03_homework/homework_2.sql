@@ -81,3 +81,4 @@ vendor_id field they both have in common, and sorts the result by vendor_name, t
 SELECT * FROM vendor
 INNER JOIN vendor_booth_assignments
 ON vendor.vendor_id = vendor_booth_assignments.vendor_id
+ORDER BY vendor_name, market_date;
