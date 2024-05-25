@@ -9,26 +9,20 @@ Think a bit about the row counts: how many distinct vendors, product names are t
 How many customers are there (y). 
 Before your final group by you should have the product of those two queries (x*y).  */
 -- Step 1: Calculate the total number of customers
-WITH product_vendor AS (
 SELECT
-	DISTINCT product.product_name
-	,vendor.vendor_name
-	,vendor_inventory.original_price
-	
-FROM vendor_inventory
-JOIN product 
-	ON vendor_inventory.product_id=product.product_id
-	
-JOIN vendor 
-	ON vendor.vendor_id=vendor_inventory.vendor_id)
-SELECT 
-	SUM(5*original_price) AS sell_5products
-	,product_name
-	,vendor_name
-	
-FROM customer
-CROSS JOIN product_vendor
-GROUP BY product_name, vendor_name
+    v.vendor_name,
+    p.product_name,
+    SUM(5 * vi.original_price * c.customer_count) AS total_sales
+FROM vendor v
+JOIN vendor_inventory vi 
+	ON v.vendor_id = vi.vendor_id
+JOIN product p 
+	ON vi.product_id = p.product_id
+CROSS JOIN
+    (SELECT COUNT(DISTINCT customer_id) AS customer_count FROM customer) c
+GROUP BY
+    v.vendor_name,
+    p.product_name;
 
 
 
