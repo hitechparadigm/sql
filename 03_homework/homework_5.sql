@@ -8,15 +8,27 @@ Remember, CROSS JOIN will explode your table rows, so CROSS JOIN should likely b
 Think a bit about the row counts: how many distinct vendors, product names are there (x)?
 How many customers are there (y). 
 Before your final group by you should have the product of those two queries (x*y).  */
+-- Step 1: Calculate the total number of customers
+WITH product_vendor AS (
 SELECT
-    vendor_name,
-    product_name,
-    SUM(vendor_inventory.vendor_inventory_qty * product.product_price) AS revenue
-FROM
-    vendor_inventory
-        CROSS JOIN
-    product
-GROUP BY vendor_name , product_name;
+	DISTINCT product.product_name
+	,vendor.vendor_name
+	,vendor_inventory.original_price
+	
+FROM vendor_inventory
+JOIN product 
+	ON vendor_inventory.product_id=product.product_id
+	
+JOIN vendor 
+	ON vendor.vendor_id=vendor_inventory.vendor_id)
+SELECT 
+	SUM(5*original_price) AS sell_5products
+	,product_name
+	,vendor_name
+	
+FROM customer
+CROSS JOIN product_vendor
+GROUP BY product_name, vendor_name
 
 
 
