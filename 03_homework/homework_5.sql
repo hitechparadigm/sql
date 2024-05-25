@@ -9,10 +9,11 @@ Think a bit about the row counts: how many distinct vendors, product names are t
 How many customers are there (y). 
 Before your final group by you should have the product of those two queries (x*y).  */
 -- Step 1: Calculate the total number of customers
+
 SELECT
     v.vendor_name,
     p.product_name,
-    SUM(5 * vi.original_price * c.customer_count) AS total_sales
+    5 * vi.original_price * c.customer_count AS total_sales
 FROM vendor v
 JOIN vendor_inventory vi 
 	ON v.vendor_id = vi.vendor_id
