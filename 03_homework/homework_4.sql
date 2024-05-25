@@ -57,7 +57,6 @@ SELECT
     customer_id,
     market_date,
     product_id,
-    purchase_amount,
     ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS visit_number
 FROM
     customer_purchases;
@@ -65,12 +64,12 @@ FROM
 
 
 /* 3. Using a COUNT() window function, include a value along with each row of the 
-customer_purchases table that indicates how many different times that customer has purchased that product_id. */
+customer_purchases table that indicates how many different times that customer has purchased 
+that product_id. */
 SELECT
     customer_id,
     market_date,
     product_id,
-    purchase_amount,
     COUNT(*) OVER (PARTITION BY customer_id, product_id) AS purchase_count
 FROM
     customer_purchases;
